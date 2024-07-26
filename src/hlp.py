@@ -39,5 +39,3 @@ def iterone(input_list):
             print(i)
 
 print(iterone(input_from_excel('..\\data\\operations.xlsx')))
-
-1
