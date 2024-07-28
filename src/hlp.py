@@ -76,3 +76,5 @@ def greetings(input_datetime: str) -> str:
 
 
 print(greetings("01.01.2018 12:49:53"))
+
+
