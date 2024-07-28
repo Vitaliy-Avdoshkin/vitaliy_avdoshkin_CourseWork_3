@@ -4,11 +4,10 @@ import logging
 import os
 import re
 from collections import Counter
+from datetime import datetime
 from typing import Any
+
 import pandas as pd
-
-import os
-
 import requests
 from dotenv import load_dotenv
 
@@ -68,7 +67,7 @@ def input_from_excel(input_xlsx_file: str) -> list[Any]:
         return []
 
 
-print(input_from_excel(abs_xlsx_path))
+# print(input_from_excel(abs_xlsx_path))
 
 
 def get_currency_rates(json_file: str) -> list[Any]:
@@ -89,14 +88,14 @@ def get_currency_rates(json_file: str) -> list[Any]:
             response = requests.get(url, headers=headers)
 
             result = response.json()
-            #print(result)
+            # print(result)
             currency_rates_dict = {"currency": i, "rate": result["rates"].get("RUB")}
             currency_rates_list_dicts.append(currency_rates_dict)
 
         return currency_rates_list_dicts
 
 
-print(get_currency_rates(abs_json_path))
+# print(get_currency_rates(abs_json_path))
 
 
 def get_stock_prices(json_file: str) -> list[Any]:
@@ -121,4 +120,22 @@ def get_stock_prices(json_file: str) -> list[Any]:
         return stock_prices_list_dicts
 
 
-print(get_stock_prices(abs_json_path))
+# print(get_stock_prices(abs_json_path))
+
+
+def greetings(input_datetime: str) -> str:
+    """Функция принимает на вход строку с датой и временем и возвращает приветствие, в зависимости от времени"""
+    date_update = datetime.strptime(input_datetime, "%d.%m.%Y %H:%M:%S")
+    time = date_update.strftime("%H:%M:%S")
+
+    if time >= "05:00:00" and time <= "12:00:00":
+        return "Доброе утро"
+    if time > "12:00:00" and time <= "18:00:00":
+        return "Добрый день"
+    if time > "18:00:00" and time <= "23:00:00":
+        return "Добрый вечер"
+    if time > "23:00:00" and time < "05:00:00":
+        return "Доброй ночи"
+
+
+print(greetings("01.01.2018 12:49:53"))

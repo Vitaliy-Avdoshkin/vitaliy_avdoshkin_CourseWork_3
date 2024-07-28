@@ -4,12 +4,11 @@ import logging
 import os
 import re
 from collections import Counter
+from datetime import datetime
 from typing import Any
+
+import numpy as np
 import pandas as pd
-
-
-import os
-
 import requests
 from dotenv import load_dotenv
 
@@ -44,33 +43,36 @@ file_handler.setFormatter(file_formatter)
 logger.addHandler(file_handler)
 
 
-# url = f"https://financialmodelingprep.com/api/v3/quote/AAPL?apikey={API_KEY_STOCKS}"
-#
-# response = requests.get(url)
-#
-# result = response.json()
+# input_xlsx_file = pd.read_excel(abs_xlsx_path)
+# df_dict = input_xlsx_file.to_dict("records")
+# patter = re.compile(r'\D\d\d\d')
+# dict_test = {}
+# for i in df_dict:
+#     i['Номер карты'] = str(i['Номер карты'])
+#     match = patter.search(i['Номер карты'])
+#     if match:
+#         dict_test['last_digits'] = i['Номер карты'][1:]
+#     else:
+#         dict_test['last_digits'] = 'Номер карты не указан'
+#     print(dict_test)
 
 
-def get_stock_prices(json_file):
-    """Функция принимает на вход json-файл и возвращает список словарей с курсами требуемых акций.
-    Стоимости акций функция импортирует через API"""
-
-    with open(json_file, "r", encoding="utf-8") as file:
-
-        currencies_stocks_list = json.load(file)
-        stock_prices_list_dicts = []
-        # print(transactions_info)
-        for i in currencies_stocks_list["user_stocks"]:
-
-            url = f"https://financialmodelingprep.com/api/v3/quote/{i}?apikey={API_KEY_STOCKS}"
-
-            response = requests.get(url)
-
-            result = response.json()
-            stock_prices_dicts = {"stock": i, "price": result[0].get("priceAvg200")}
-            stock_prices_list_dicts.append(stock_prices_dicts)
-
-        return stock_prices_list_dicts
+# now = datetime.now()
+# print(now)
 
 
-print(get_stock_prices(abs_json_path))
+def greetings(input_datetime: str) -> str:
+    date_update = datetime.strptime(input_datetime, "%d.%m.%Y %H:%M:%S")
+    time = date_update.strftime("%H:%M:%S")
+
+    if time >= "05:00:00" and time <= "12:00:00":
+        return "Доброе утро"
+    if time > "12:00:00" and time <= "18:00:00":
+        return "Добрый день"
+    if time > "18:00:00" and time <= "23:00:00":
+        return "Добрый вечер"
+    if time > "23:00:00" and time < "05:00:00":
+        return "Доброй ночи"
+
+
+print(greetings("01.01.2018 12:49:53"))
