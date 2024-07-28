@@ -55,7 +55,7 @@ def input_from_excel(input_xlsx_file: str) -> list[Any]:
     input_xlsx_file = pd.read_excel(abs_xlsx_path)
 
     try:
-        logger.info("Путь до файла xlsx верный")
+        logger.info("Данные из файла xlsx импортированы")
 
         # Преобразуем DataFrame в список словарей
         df_dict = input_xlsx_file.to_dict("records")
@@ -68,13 +68,13 @@ def input_from_excel(input_xlsx_file: str) -> list[Any]:
         return []
 
 
-# print(input_from_excel(abs_xlsx_path))
+print(input_from_excel(abs_xlsx_path))
 
 
-def get_currency_rates(json_file):
+def get_currency_rates(json_file: str) -> list[Any]:
     """Функция принимает на вход json-файл и возвращает список словарей с курсами требуемых валют.
     Курс валюты функция импортирует через API"""
-
+    logger.info("Курсы валют получены")
     with open(json_file, "r", encoding="utf-8") as file:
 
         currencies_stocks_list = json.load(file)
@@ -89,6 +89,7 @@ def get_currency_rates(json_file):
             response = requests.get(url, headers=headers)
 
             result = response.json()
+            #print(result)
             currency_rates_dict = {"currency": i, "rate": result["rates"].get("RUB")}
             currency_rates_list_dicts.append(currency_rates_dict)
 
@@ -98,10 +99,10 @@ def get_currency_rates(json_file):
 print(get_currency_rates(abs_json_path))
 
 
-def get_stock_prices(json_file):
+def get_stock_prices(json_file: str) -> list[Any]:
     """Функция принимает на вход json-файл и возвращает список словарей с курсами требуемых акций.
     Стоимости акций функция импортирует через API"""
-
+    logger.info("Стоимости акций получены")
     with open(json_file, "r", encoding="utf-8") as file:
 
         currencies_stocks_list = json.load(file)
