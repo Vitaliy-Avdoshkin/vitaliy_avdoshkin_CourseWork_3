@@ -79,6 +79,12 @@ poetry add pandas
 poetry add openpyxl
 ```
 
+6. Установите библиотеки requests и dotenv
+````commandline
+poetry add requests
+poetry add python-dotenv
+````
+
 ## Тестирование
 
 1. Для тестирования кода установите Pytest
