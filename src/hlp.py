@@ -44,18 +44,11 @@ file_handler.setFormatter(file_formatter)
 logger.addHandler(file_handler)
 
 
-
-
-
-
-
-
-url = f"https://financialmodelingprep.com/api/v3/quote/AAPL?apikey={API_KEY_STOCKS}"
-
-response = requests.get(url)
-
-result = response.json()
-print(result)
+# url = f"https://financialmodelingprep.com/api/v3/quote/AAPL?apikey={API_KEY_STOCKS}"
+#
+# response = requests.get(url)
+#
+# result = response.json()
 
 
 def get_stock_prices(json_file):
@@ -64,22 +57,20 @@ def get_stock_prices(json_file):
 
     with open(json_file, "r", encoding="utf-8") as file:
 
-        transactions_info = json.load(file)
-        currency_rates = []
-        #print(transactions_info)
-        for i in transactions_info["user_currencies"]:
+        currencies_stocks_list = json.load(file)
+        stock_prices_list_dicts = []
+        # print(transactions_info)
+        for i in currencies_stocks_list["user_stocks"]:
 
-            url = f"https://api.apilayer.com/exchangerates_data/latest?symbols=RUB&base={i}"
+            url = f"https://financialmodelingprep.com/api/v3/quote/{i}?apikey={API_KEY_STOCKS}"
 
-            headers = {"apikey": API_KEY_RATES}
-
-            response = requests.get(url, headers=headers)
+            response = requests.get(url)
 
             result = response.json()
-            currate = {"currency": i, "rate": result["rates"].get("RUB")}
-            currency_rates.append(currate)
+            stock_prices_dicts = {"stock": i, "price": result[0].get("priceAvg200")}
+            stock_prices_list_dicts.append(stock_prices_dicts)
 
-        return currency_rates
+        return stock_prices_list_dicts
 
 
-print(get_currency_rates(abs_json_path))
+print(get_stock_prices(abs_json_path))

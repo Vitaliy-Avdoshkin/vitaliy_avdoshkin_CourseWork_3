@@ -96,3 +96,28 @@ def get_currency_rates(json_file):
 
 
 print(get_currency_rates(abs_json_path))
+
+
+def get_stock_prices(json_file):
+    """Функция принимает на вход json-файл и возвращает список словарей с курсами требуемых акций.
+    Стоимости акций функция импортирует через API"""
+
+    with open(json_file, "r", encoding="utf-8") as file:
+
+        currencies_stocks_list = json.load(file)
+        stock_prices_list_dicts = []
+        # print(transactions_info)
+        for i in currencies_stocks_list["user_stocks"]:
+
+            url = f"https://financialmodelingprep.com/api/v3/quote/{i}?apikey={API_KEY_STOCKS}"
+
+            response = requests.get(url)
+
+            result = response.json()
+            stock_prices_dicts = {"stock": i, "price": result[0].get("priceAvg200")}
+            stock_prices_list_dicts.append(stock_prices_dicts)
+
+        return stock_prices_list_dicts
+
+
+print(get_stock_prices(abs_json_path))
