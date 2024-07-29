@@ -138,4 +138,4 @@ def greetings(input_datetime: str) -> str:
         return "Доброй ночи"
 
 
-#print(greetings("01.01.2018 12:49:53"))
+# print(greetings("01.01.2018 12:49:53"))
