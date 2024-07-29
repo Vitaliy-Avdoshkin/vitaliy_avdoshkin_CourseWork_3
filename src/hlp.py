@@ -4,7 +4,7 @@ import logging
 import os
 import re
 from collections import Counter
-from datetime import datetime
+from datetime import datetime as dt
 from typing import Any
 
 import numpy as np
@@ -42,12 +42,31 @@ file_formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s: %(me
 file_handler.setFormatter(file_formatter)
 logger.addHandler(file_handler)
 
+
+# def input_from_excel(input_xlsx_file: str) -> list[Any]:
+#     """Функция принимает на вход путь до файла xlsx и возвращает список словарей"""
+#
+#     input_xlsx_file = pd.read_excel(abs_xlsx_path)
+#
+#     try:
+#         logger.info("Данные из файла xlsx импортированы")
+#
+#         # Преобразуем DataFrame в список словарей
+#         df_dict = input_xlsx_file.to_dict("records")
+#         output_list_dicts = []
+#         for i in df_dict:
+#             output_list_dicts.append(i)
+#         return output_list_dicts
+#     except Exception:
+#         logger.warning("Импортируемый список пуст или отсутствует.")
+#         return []
+#
+#
+# input_df = input_from_excel(abs_xlsx_path)
+#
 # input_xlsx_file = pd.read_excel(abs_xlsx_path)
-# df_dict = input_xlsx_file.to_dict("records")
-#
-# for i in df_dict:
-#
-#     print(i)
+# print(input_xlsx_file)
+# print(input_from_excel(abs_xlsx_path))
 
 
 # input_xlsx_file = pd.read_excel(abs_xlsx_path)
@@ -69,7 +88,7 @@ logger.addHandler(file_handler)
 
 
 # def greetings(input_datetime: str) -> str:
-#     date_update = datetime.strptime(input_datetime, "%d.%m.%Y %H:%M:%S")
+#     date_update = dt.strptime(input_datetime, "%d.%m.%Y %H:%M:%S")
 #     time = date_update.strftime("%H:%M:%S")
 #
 #     if time >= "05:00:00" and time <= "12:00:00":
@@ -112,31 +131,85 @@ logger.addHandler(file_handler)
 #
 # cards()
 
-input_date = "2019-01-01 23:01:00"
-
-
-def get_data(input_date) -> str:
+input_datetime = "2018-02-16 12:01:58"
+#
+#
+def get_data(input_datetime) -> str:
     """Функция преобразования даты"""
 
-    date_update = datetime.strptime(input_date, "%Y-%m-%d %H:%M:%S")
+    date_update = dt.strptime(input_datetime, "%Y-%m-%d %H:%M:%S")
     return date_update.strftime("%d.%m.%Y %H:%M:%S")
+get_dt = get_data(input_datetime)
+print(f'get_data {get_dt}')
 
 
-get_data = get_data(input_date)
+#
+#
+# def greetings(input_datetime: str) -> str:
+#     date_update = dt.strptime(input_datetime, "%d.%m.%Y %H:%M:%S")
+#     time = date_update.strftime("%H:%M:%S")
+#
+#     if time > "05:00:00" and time <= "12:00:00":
+#         return "Доброе утро"
+#     if time > "12:00:00" and time <= "18:00:00":
+#         return "Добрый день"
+#     if time > "18:00:00" and time <= "23:00:00":
+#         return "Добрый вечер"
+#     else:
+#         return "Доброй ночи"
+#
+# greetings_output = greetings(get_dt)
 
 
-def greetings(input_datetime: str) -> str:
-    date_update = datetime.strptime(input_datetime, "%d.%m.%Y %H:%M:%S")
-    time = date_update.strftime("%H:%M:%S")
-
-    if time > "05:00:00" and time <= "12:00:00":
-        return "Доброе утро"
-    if time > "12:00:00" and time <= "18:00:00":
-        return "Добрый день"
-    if time > "18:00:00" and time <= "23:00:00":
-        return "Добрый вечер"
-    else:
-        return "Доброй ночи"
 
 
-print(greetings(get_data))
+# def print_i(input_src: list[Any]) -> list[Any]:
+#     for i in input_src:
+#         print(i)
+#
+#
+#
+# print(print_i(input_df))
+
+
+# def data_update(file):
+#
+#
+#     df_date = pd.to_datetime(file['Дата операции'], format="%d.%m.%Y %H:%M:%S")
+#
+#     return df_date
+#
+# print(data_update(input_xlsx_file,"2018-02-16 00:00:00" ))
+
+
+# def from_excel(file):
+#     df = pd.read_excel(file)
+#     df_date = pd.to_datetime(df['Дата операции'], format="%d.%m.%Y %H:%M:%S")
+#     return df_date
+#
+# print(from_excel(abs_xlsx_path))
+#
+# # input_xlsx_file = pd.read_excel(abs_xlsx_path)
+# # df_date = pd.to_datetime(input_xlsx_file['Дата операции'], format="%d.%m.%Y %H:%M:%S")
+# # print(df_date)
+# # #print(input_xlsx_file)
+
+# def filter(file, datin):
+#     st = datin.replace(day=1, hour=0, minute=0, second=0)
+#     df = pd.read_excel(file)
+#     df_date = pd.to_datetime(df['Дата операции'], format='%d.%m.%Y %H:%M:%S')
+#     df = df[(st <= df_date) & (df_date <= datin)]
+#     return df
+# print(filter(abs_xlsx_path, '16-02-2018 00:00:00'))
+
+
+def filter(datin):
+    date_update = dt.strptime(datin, "%d.%m.%Y %H:%M:%S")
+    st = date_update.replace(day=1, hour=0, minute=0, second=0)
+    du = st.strftime("%d.%m.%Y %H:%M:%S")
+
+    return du
+print(filter(get_dt))
+
+
+

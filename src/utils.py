@@ -122,20 +122,31 @@ def get_stock_prices(json_file: str) -> list[Any]:
 
 # print(get_stock_prices(abs_json_path))
 
+input_datetime = "2019-01-01 23:01:00"
+
+
+def get_data(input_datetime) -> str:
+    """Функция преобразования даты"""
+
+    date_update = datetime.strptime(input_datetime, "%Y-%m-%d %H:%M:%S")
+    return date_update.strftime("%d.%m.%Y %H:%M:%S")
+
+
+get_data = get_data(input_datetime)
+
 
 def greetings(input_datetime: str) -> str:
-    """Функция принимает на вход строку с датой и временем и возвращает приветствие, в зависимости от времени"""
     date_update = datetime.strptime(input_datetime, "%d.%m.%Y %H:%M:%S")
     time = date_update.strftime("%H:%M:%S")
 
-    if time >= "05:00:00" and time <= "12:00:00":
+    if time > "05:00:00" and time <= "12:00:00":
         return "Доброе утро"
     if time > "12:00:00" and time <= "18:00:00":
         return "Добрый день"
     if time > "18:00:00" and time <= "23:00:00":
         return "Добрый вечер"
-    if time > "23:00:00" and time < "05:00:00":
+    else:
         return "Доброй ночи"
 
 
-# print(greetings("01.01.2018 12:49:53"))
+# print(greetings(get_data))
