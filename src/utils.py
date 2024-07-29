@@ -4,7 +4,7 @@ import logging
 import os
 import re
 from collections import Counter
-from datetime import datetime
+from datetime import datetime as dt
 from typing import Any
 
 import pandas as pd
@@ -128,15 +128,15 @@ input_datetime = "2019-01-01 23:01:00"
 def get_data(input_datetime) -> str:
     """Функция преобразования даты"""
 
-    date_update = datetime.strptime(input_datetime, "%Y-%m-%d %H:%M:%S")
+    date_update = dt.strptime(input_datetime, "%Y-%m-%d %H:%M:%S")
     return date_update.strftime("%d.%m.%Y %H:%M:%S")
 
+#print(get_data("2018-02-16 12:01:58"))
 
-get_data = get_data(input_datetime)
 
 
 def greetings(input_datetime: str) -> str:
-    date_update = datetime.strptime(input_datetime, "%d.%m.%Y %H:%M:%S")
+    date_update = dt.strptime(input_datetime, "%d.%m.%Y %H:%M:%S")
     time = date_update.strftime("%H:%M:%S")
 
     if time > "05:00:00" and time <= "12:00:00":
@@ -148,5 +148,14 @@ def greetings(input_datetime: str) -> str:
     else:
         return "Доброй ночи"
 
+#print(greetings(get_data("2018-02-16 12:01:58")))
 
-# print(greetings(get_data))
+
+def start_month(input_datetime):
+    date_update = dt.strptime(input_datetime, "%d.%m.%Y %H:%M:%S")
+    start = date_update.replace(day=1, hour=0, minute=0, second=0)
+    start_update = start.strftime("%d.%m.%Y %H:%M:%S")
+
+    return start_update
+
+#print(start_month(get_data("2018-02-16 12:01:58")))

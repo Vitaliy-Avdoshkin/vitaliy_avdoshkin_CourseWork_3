@@ -78,34 +78,29 @@ input_df = input_from_excel(abs_xlsx_path)
 #     print(dict_test)
 
 
-
-
-input_datetime = "2018-02-16 12:01:58"
-#
-#
 def get_data(input_datetime) -> str:
     """Функция преобразования даты"""
 
     date_update = dt.strptime(input_datetime, "%Y-%m-%d %H:%M:%S")
     return date_update.strftime("%d.%m.%Y %H:%M:%S")
-get_dt = get_data(input_datetime)
-print(f'get_data {get_dt}')
+print(get_data("2018-02-16 12:01:58"))
 
 
-# def greetings(input_datetime: str) -> str:
-#     date_update = dt.strptime(input_datetime, "%d.%m.%Y %H:%M:%S")
-#     time = date_update.strftime("%H:%M:%S")
-#
-#     if time > "05:00:00" and time <= "12:00:00":
-#         return "Доброе утро"
-#     if time > "12:00:00" and time <= "18:00:00":
-#         return "Добрый день"
-#     if time > "18:00:00" and time <= "23:00:00":
-#         return "Добрый вечер"
-#     else:
-#         return "Доброй ночи"
-#
-# greetings_output = greetings(get_dt)
+
+def greetings(input_datetime: str) -> str:
+    date_update = dt.strptime(input_datetime, "%d.%m.%Y %H:%M:%S")
+    time = date_update.strftime("%H:%M:%S")
+
+    if time > "05:00:00" and time <= "12:00:00":
+        return "Доброе утро"
+    if time > "12:00:00" and time <= "18:00:00":
+        return "Добрый день"
+    if time > "18:00:00" and time <= "23:00:00":
+        return "Добрый вечер"
+    else:
+        return "Доброй ночи"
+
+print(greetings(get_data("2018-02-16 12:01:58")))
 
 
 
@@ -128,13 +123,13 @@ print(f'get_data {get_dt}')
 # print(filter(abs_xlsx_path, '16-02-2018 00:00:00'))
 
 
-def filter(datin):
-    date_update = dt.strptime(datin, "%d.%m.%Y %H:%M:%S")
-    st = date_update.replace(day=1, hour=0, minute=0, second=0)
-    du = st.strftime("%d.%m.%Y %H:%M:%S")
+def start_month(input_datetime):
+    date_update = dt.strptime(input_datetime, "%d.%m.%Y %H:%M:%S")
+    start = date_update.replace(day=1, hour=0, minute=0, second=0)
+    start_update = start.strftime("%d.%m.%Y %H:%M:%S")
 
-    return du
-print(filter(get_dt))
+    return start_update
+print(start_month(get_data("2018-02-16 12:01:58")))
 
 
 
