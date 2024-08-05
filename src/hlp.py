@@ -134,4 +134,102 @@ def top_transactions(input_df):
         return "Импортируемый список пуст или отсутствует."
 
 
-print(top_transactions(filtered_to_date))
+#print(top_transactions(filtered_to_date))
+
+
+# def input_from_excel(input_xlsx_file: str) -> list[dict[str, Any]]:
+#     """Функция принимает на вход путь до файла xlsx и возвращает список словарей"""
+#
+#     dataframe = pd.read_excel(input_xlsx_file)
+#
+#     try:
+#         logger.info("DataFrame создан")
+#         transactions = dataframe[['Дата операции', 'Сумма операции']].copy
+#         #df_date = pd.to_datetime(transactions["Дата операции"], format="%d.%m.%Y %H:%M:%S")
+#         #return df_date
+#         return transactions
+#     except Exception:
+#         logger.warning("Импортируемый список пуст или отсутствует.")
+#         return []
+#
+#
+# df = input_from_excel(abs_xlsx_path)
+#
+#
+# def fed(deg):
+#
+#     df_date = pd.to_datetime(deg["Дата операции"], format="%d.%m.%Y %H:%M:%S")
+#     return df_date
+#
+# print(fed(df))
+# def get_transactions_info(input_df: pd.DataFrame) -> list[dict[str, Any]]:
+#     dataframe = pd.read_excel(input_df)
+#     dataframe["Дата операции"] = pd.to_datetime(dataframe["Дата операции"], format="%d.%m.%Y %H:%M:%S")
+#     transactions = dataframe[['Дата операции', 'Сумма платежа']]
+#
+#
+#
+#     #return transactions
+#
+#
+#
+# # transactions = get_transactions_info(abs_xlsx_path)
+# # print(transactions)
+#
+#
+# def get_transactions_info(input_xlsx_file: str) -> list[dict[str, Any]]:
+#     """Функция принимает на вход путь до файла xlsx и возвращает список словарей"""
+#
+#     input_df = pd.read_excel(input_xlsx_file)
+#
+#     try:
+#         logger.info("Данные из файла xlsx импортированы")
+#
+#         #input_df["Дата операции"] = pd.to_datetime(input_df["Дата операции"], format="%d.%m.%Y %H:%M:%S")
+#         transactions_df = input_df[['Дата операции', 'Сумма платежа']]
+#         # Преобразуем DataFrame в список словарей
+#         transactions = transactions_df.to_dict("records")
+#         output_list_dicts = []
+#         for i in transactions:
+#             output_list_dicts.append(i)
+#
+#         return output_list_dicts
+#     except Exception:
+#         logger.warning("Импортируемый список пуст или отсутствует.")
+#         return []
+#
+#
+# print(get_transactions_info(abs_xlsx_path))
+
+
+df = pd.read_excel(abs_xlsx_path)
+df["Дата платежа"] = pd.to_datetime(df["Дата платежа"], format="%d.%m.%Y %H:%M:%S")
+# transactions = dataframe.loc[:, ['Дата платежа']]
+
+print(df)
+
+
+# def from_excel_to_list(input_xlsx_file: str) -> list[dict[str, Any]]:
+#     """Функция принимает на вход путь до файла xlsx и возвращает список словарей"""
+#
+#     input_df = pd.read_excel(input_xlsx_file)
+#     output_list_dicts = []
+#     try:
+#         logger.info("Данные из файла xlsx импортированы")
+#
+#         # Преобразуем DataFrame в список словарей
+#         df_dict = input_df.to_dict("records")
+#         output_list_dicts = []
+#         for i in df_dict:
+#             output_dict = {}
+#             output_dict['Дата операции'] = i['Дата операции']
+#             output_dict['Сумма платежа'] = abs(i['Сумма платежа'])
+#             output_list_dicts.append(output_dict)
+#
+#         return output_list_dicts
+#     except Exception:
+#         logger.warning("Импортируемый список пуст или отсутствует.")
+#         return []
+#
+#
+# print(from_excel_to_list(abs_xlsx_path))

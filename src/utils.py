@@ -47,26 +47,27 @@ with open(abs_json_path, "w") as file:
     json.dump(currencies_stocks_dict, file)
 
 
-def from_excel_to_list(input_xlsx_file: str) -> list[Any]:
+def from_excel_to_list(input_xlsx_file: str) -> list[dict[str, Any]]:
     """Функция принимает на вход путь до файла xlsx и возвращает список словарей"""
 
-    input_xlsx_file = pd.read_excel(abs_xlsx_path)
+    input_df = pd.read_excel(input_xlsx_file)
 
     try:
         logger.info("Данные из файла xlsx импортированы")
 
         # Преобразуем DataFrame в список словарей
-        df_dict = input_xlsx_file.to_dict("records")
+        df_dict = input_df.to_dict("records")
         output_list_dicts = []
         for i in df_dict:
             output_list_dicts.append(i)
+        transactions =
         return output_list_dicts
     except Exception:
         logger.warning("Импортируемый список пуст или отсутствует.")
         return []
 
 
-# print(from_excel_to_list(abs_xlsx_path))
+print(from_excel_to_list(abs_xlsx_path))
 
 
 def get_currency_rates(json_file: str) -> list[Any]:
