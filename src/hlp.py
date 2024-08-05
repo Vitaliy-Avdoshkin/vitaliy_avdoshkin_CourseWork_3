@@ -110,25 +110,28 @@ def cards_info(input_df: str) -> list[dict[str, Any]]:
 
 # print(cards_info(filtered_to_date))
 
-def top_transactions(inpur_df)
-    df_input = input_df
-    df_output = []
+
+def top_transactions(input_df):
+    df_input_sort = input_df
+    df_output_sort = []
     try:
         logger.info("Данные из файла xlsx импортированы")
 
-        cards = df_input.groupby("Номер карты")
-        cards_prices = cards["Сумма операции с округлением"].sum()
-        df_test = cards_prices.to_dict()
+        sorted_df = df_input_sort.sort_values("Сумма платежа", ascending=False)
+        sort_five = sorted_df.iloc[0:5]
 
-        for cards, sum in df_test.items():
-            df_result = {}
-            df_result["last_digits"] = cards
-            df_result["total_spent"] = sum
-            df_result["cashback"] = round(sum / 100, 2)
-            df_output.append(df_result)
-        return df_output
+        df_sort_dict = sort_five.to_dict("records")
+        for i in df_sort_dict:
+            df_sort_result = {}
+            df_sort_result["date"] = i["Дата платежа"]
+            df_sort_result["amount"] = i["Сумма платежа"]
+            df_sort_result["category"] = i["Категория"]
+            df_sort_result["description"] = i["Описание"]
+            df_output_sort.append(df_sort_result)
+        return df_output_sort
     except Exception:
         logger.warning("Импортируемый список пуст или отсутствует.")
         return "Импортируемый список пуст или отсутствует."
 
-# print(cards_info(filtered_to_date))
+
+print(top_transactions(filtered_to_date))

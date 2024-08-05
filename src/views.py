@@ -12,7 +12,7 @@ import pandas as pd
 import requests
 from dotenv import load_dotenv
 
-from src.utils import start_month, greetings, cards_info
+from src.utils import start_month, greetings, cards_info, top_transactions, get_currency_rates, get_stock_prices
 
 load_dotenv(".env")
 
@@ -73,22 +73,39 @@ def home_page(input_df: Any) -> Any:
     # Формируем приветствие
     logger.info("Приветствие сформировано")
     greetings_output = greetings(input_datetime)
-    # print(greetings_output)
 
     # Получаем начало месяца
     begin_month = start_month(input_datetime)
-    # print(begin_month)
 
     # Отфильтровываем DataFrame по лимиту дат
     logger.info("Входной DataFrame отфильтрован по лимиту дат")
     df_date = pd.to_datetime(df["Дата операции"], format="%d.%m.%Y %H:%M:%S")
     filtered_df_to_date = df[(begin_month <= df_date) & (df_date <= input_datetime)]
-    # print(filtered_df_to_date)
 
     # Получаем требуемую информацию по картам (номер карты, общая сумма расходов, кэшбэк)
     logger.info("Информация по банковским картам получена: последние 4 цифры карты, общая сумма расходов, кэшбэк")
     cards_description = cards_info(filtered_df_to_date)
-    print(cards_description)
+
+    # Получаем информацию по ТОП-5 транзакциям по сумме платежа
+    logger.info("Информация по ТОП-5 транзакциям по сумме платежа получена")
+    top_five_transactions = top_transactions(filtered_df_to_date)
+
+    # Получаем информацию по курсам валют: USD, EUR
+    logger.info("Информация по курсам валют получена: USD, EUR")
+    currency_rates = get_currency_rates(abs_json_path)
+
+    # Получаем информацию по стоимости акций
+    logger.info("Информация по по стоимости акций получена")
+    stock_prices = get_stock_prices(abs_json_path)
+
+    # Формируем список словарей с результатами
+    result_list_dicts = {'greeting': greetings_output, 'cards': cards_description, 'top_transactions': top_five_transactions, 'currency_rates': currency_rates, 'stock_prices': stock_prices}
+
+    # Формируем json-файл
+    logger.info("json-файл создан успешно")
+    json_output = json.dumps(result_list_dicts, ensure_ascii=False, indent=4)
+    return json_output
 
 
-home_page(df)
+
+print(home_page(df))
