@@ -1,4 +1,3 @@
-import csv
 import json
 import logging
 import os
@@ -159,3 +158,33 @@ def start_month(input_datetime):
     return start_update
 
 #print(start_month(get_data("2018-02-16 12:01:58")))
+
+
+def cards_info(input_xlsx_file: str) -> list[dict[str, Any]]:
+    """Функция принимает на вход путь до файла xlsx и возвращает DataFrame"""
+
+    input_xlsx_file = pd.read_excel(abs_xlsx_path)
+    df_output = []
+    try:
+        logger.info("Данные из файла xlsx импортированы")
+
+        cards = input_xlsx_file.groupby('Номер карты')
+        cards_prices = cards['Сумма операции с округлением'].sum()
+        df_test = cards_prices.to_dict()
+
+        for cards, sum in df_test.items():
+            df_result = {}
+            #print(cards)
+            #print(f'{cards} = {sum}')
+            df_result['last_digits'] = cards
+            df_result['total_spent'] = sum
+            df_result['cashback'] = round(sum / 100, 2)
+            df_output.append(df_result)
+        return df_output
+    except Exception:
+        logger.warning("Импортируемый список пуст или отсутствует.")
+        return "Импортируемый список пуст или отсутствует."
+
+
+cards_info = cards_info(abs_xlsx_path)
+#print(cards_info)
