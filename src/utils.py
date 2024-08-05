@@ -47,7 +47,7 @@ with open(abs_json_path, "w") as file:
     json.dump(currencies_stocks_dict, file)
 
 
-def input_from_excel(input_xlsx_file: str) -> list[Any]:
+def from_excel_to_list(input_xlsx_file: str) -> list[Any]:
     """Функция принимает на вход путь до файла xlsx и возвращает список словарей"""
 
     input_xlsx_file = pd.read_excel(abs_xlsx_path)
@@ -66,7 +66,7 @@ def input_from_excel(input_xlsx_file: str) -> list[Any]:
         return []
 
 
-# print(input_from_excel(abs_xlsx_path))
+# print(from_excel_to_list(abs_xlsx_path))
 
 
 def get_currency_rates(json_file: str) -> list[Any]:
@@ -121,21 +121,11 @@ def get_stock_prices(json_file: str) -> list[Any]:
 
 # print(get_stock_prices(abs_json_path))
 
-input_datetime = "2019-01-01 23:01:00"
-
-
-def get_data(input_datetime) -> str:
-    """Функция преобразования даты"""
-
-    date_update = dt.strptime(input_datetime, "%Y-%m-%d %H:%M:%S")
-    return date_update.strftime("%d.%m.%Y %H:%M:%S")
-
-
-# print(get_data("2018-02-16 12:01:58"))
+input_datetime = "2018-02-16 12:01:58"
 
 
 def greetings(input_datetime: str) -> str:
-    date_update = dt.strptime(input_datetime, "%d.%m.%Y %H:%M:%S")
+    date_update = dt.strptime(input_datetime, "%Y-%m-%d %H:%M:%S")
     time = date_update.strftime("%H:%M:%S")
 
     if time > "05:00:00" and time <= "12:00:00":
@@ -148,29 +138,39 @@ def greetings(input_datetime: str) -> str:
         return "Доброй ночи"
 
 
-# print(greetings(get_data("2018-02-16 12:01:58")))
+# print(greetings(input_time))
 
 
 def start_month(input_datetime):
-    date_update = dt.strptime(input_datetime, "%d.%m.%Y %H:%M:%S")
+    date_update = dt.strptime(input_datetime, "%Y-%m-%d %H:%M:%S")
     start = date_update.replace(day=1, hour=0, minute=0, second=0)
-    start_update = start.strftime("%d.%m.%Y %H:%M:%S")
-
-    return start_update
+    return start
 
 
-#print(start_month(get_data("2018-02-16 12:01:58")))
+begin_month = start_month(input_datetime)
+# print(start_month(input_time))
 
 
-def cards_info(input_xlsx_file: str) -> list[dict[str, Any]]:
+def filter_date(df_test):
+    df = pd.read_excel(df_test)
+    df_date = pd.to_datetime(df["Дата операции"], format="%d.%m.%Y %H:%M:%S")
+    filtered_df_to_date = df[(begin_month <= df_date) & (df_date <= input_datetime)]
+    return filtered_df_to_date
+
+
+filtered_to_date = filter_date(abs_xlsx_path)
+# print(filter_date(abs_xlsx_path))
+
+
+def cards_info(input_df: str) -> list[dict[str, Any]]:
     """Функция принимает на вход путь до файла xlsx и возвращает DataFrame"""
 
-    input_xlsx_file = pd.read_excel(abs_xlsx_path)
+    df_input = input_df
     df_output = []
     try:
         logger.info("Данные из файла xlsx импортированы")
 
-        cards = input_xlsx_file.groupby("Номер карты")
+        cards = df_input.groupby("Номер карты")
         cards_prices = cards["Сумма операции с округлением"].sum()
         df_test = cards_prices.to_dict()
 
@@ -186,5 +186,4 @@ def cards_info(input_xlsx_file: str) -> list[dict[str, Any]]:
         return "Импортируемый список пуст или отсутствует."
 
 
-cards_info = cards_info(abs_xlsx_path)
-# print(cards_info)
+# print(cards_info(filtered_to_date))
