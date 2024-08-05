@@ -66,73 +66,34 @@ input_df = input_from_excel(abs_xlsx_path)
 # print(input_df)
 
 
-def cards_info(input_xlsx_file: str) -> list[dict[str, Any]]:
-    """Функция принимает на вход путь до файла xlsx и возвращает DataFrame"""
-
-    input_xlsx_file = pd.read_excel(abs_xlsx_path)
-    df_output = []
-    try:
-        logger.info("Данные из файла xlsx импортированы")
-
-        cards = input_xlsx_file.groupby('Номер карты')
-        cards_prices = cards['Сумма операции с округлением'].sum()
-        df_test = cards_prices.to_dict()
-
-        for cards, sum in df_test.items():
-            df_result = {}
-            #print(cards)
-            #print(f'{cards} = {sum}')
-            df_result['last_digits'] = cards
-            df_result['total_spent'] = sum
-            df_result['cashback'] = round(sum / 100, 2)
-            df_output.append(df_result)
-        return df_output
-    except Exception:
-        logger.warning("Импортируемый список пуст или отсутствует.")
-        return "Импортируемый список пуст или отсутствует."
-
-
-cards_info = cards_info(abs_xlsx_path)
-print(cards_info)
-
-
-
-# def cards_last_digits(input_xlsx_file: str) -> list[Any]:
-#     input_xlsx_file = pd.read_excel(abs_xlsx_path)
-#     df_dict = input_xlsx_file.to_dict("records")
-#     patter = re.compile(r'\D\d\d\d')
-#     dict_test = {}
-#     for i in df_dict:
-#         i['Номер карты'] = str(i['Номер карты'])
-#         match = patter.search(i['Номер карты'])
-#         if match:
-#             dict_test['last_digits'] = i['Номер карты'][1:]
-#         else:
-#             dict_test['last_digits'] = 'Номер карты не указан'
-#         print(dict_test)
+# def cards_info(input_xlsx_file: str) -> list[dict[str, Any]]:
+#     """Функция принимает на вход путь до файла xlsx и возвращает DataFrame"""
 #
-# print(cards_last_digits(input_df))
-
-
-# def cards_last_digits_two(trans: dict[Any]) -> list[Any]:
 #     input_xlsx_file = pd.read_excel(abs_xlsx_path)
-#     df_dict = input_xlsx_file.to_dict("records")
-#     patter = re.compile(r'\D\d\d\d')
-#     dict_test = {}
-#     for i in df_dict:
-#         i['Номер карты'] = str(i['Номер карты'])
-#         match = patter.search(i['Номер карты'])
-#         if match:
-#             dict_test['last_digits'] = i['Номер карты'][1:]
-#         else:
-#             dict_test['last_digits'] = 'Номер карты не указан'
-#         print(dict_test)
+#     df_output = []
+#     try:
+#         logger.info("Данные из файла xlsx импортированы")
 #
-# print(cards_last_digits_two(input_df))
-
-
-
-
+#         cards = input_xlsx_file.groupby('Номер карты')
+#         cards_prices = cards['Сумма операции с округлением'].sum()
+#         df_test = cards_prices.to_dict()
+#
+#         for cards, sum in df_test.items():
+#             df_result = {}
+#             #print(cards)
+#             #print(f'{cards} = {sum}')
+#             df_result['last_digits'] = cards
+#             df_result['total_spent'] = sum
+#             df_result['cashback'] = round(sum / 100, 2)
+#             df_output.append(df_result)
+#         return df_output
+#     except Exception:
+#         logger.warning("Импортируемый список пуст или отсутствует.")
+#         return "Импортируемый список пуст или отсутствует."
+#
+#
+# cards_info = cards_info(abs_xlsx_path)
+# print(cards_info)
 
 
 def get_data(input_datetime) -> str:
@@ -140,8 +101,9 @@ def get_data(input_datetime) -> str:
 
     date_update = dt.strptime(input_datetime, "%Y-%m-%d %H:%M:%S")
     return date_update.strftime("%d.%m.%Y %H:%M:%S")
-#print(get_data("2018-02-16 12:01:58"))
 
+
+# print(get_data("2018-02-16 12:01:58"))
 
 
 def greetings(input_datetime: str) -> str:
@@ -157,30 +119,15 @@ def greetings(input_datetime: str) -> str:
     else:
         return "Доброй ночи"
 
-#print(greetings(get_data("2018-02-16 12:01:58")))
 
-
+# print(greetings(get_data("2018-02-16 12:01:58")))
 
 
 # def print_i(input_src: list[Any]) -> list[Any]:
 #     for i in input_src:
 #         print(i)
-#
-#
-#
+
 # print(print_i(input_df))
-
-
-#
-
-
-# def filter(file, datin):
-#     st = datin.replace(day=1, hour=0, minute=0, second=0)
-#     df = pd.read_excel(file)
-#     df_date = pd.to_datetime(df['Дата операции'], format='%d.%m.%Y %H:%M:%S')
-#     df = df[(st <= df_date) & (df_date <= datin)]
-#     return df
-# print(filter(abs_xlsx_path, '16-02-2018 00:00:00'))
 
 
 # def start_month(input_datetime):
@@ -192,4 +139,21 @@ def greetings(input_datetime: str) -> str:
 # print(start_month(get_data("2018-02-16 12:01:58")))
 
 
+# def df_filter(input_xlsx_file: str) -> list[dict[str, Any]]:
+#     """Функция принимает на вход dataframe и возвращает отфильтрованный dataframe по лимиты дат"""
+#
+#
+#
+#
+#
+# print(cards_info)
 
+
+def df_filter(input_datetime):
+
+    date_update = dt.strptime(input_datetime, "%d.%m.%Y %H:%M:%S")
+    start = date_update.replace(day=1, hour=0, minute=0, second=0)
+    start_update = start.strftime("%d.%m.%Y %H:%M:%S")
+
+    return start_update
+print(df_filter(get_data("2018-02-16 12:01:58")))

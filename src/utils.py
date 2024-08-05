@@ -130,8 +130,8 @@ def get_data(input_datetime) -> str:
     date_update = dt.strptime(input_datetime, "%Y-%m-%d %H:%M:%S")
     return date_update.strftime("%d.%m.%Y %H:%M:%S")
 
-#print(get_data("2018-02-16 12:01:58"))
 
+# print(get_data("2018-02-16 12:01:58"))
 
 
 def greetings(input_datetime: str) -> str:
@@ -147,7 +147,8 @@ def greetings(input_datetime: str) -> str:
     else:
         return "Доброй ночи"
 
-#print(greetings(get_data("2018-02-16 12:01:58")))
+
+# print(greetings(get_data("2018-02-16 12:01:58")))
 
 
 def start_month(input_datetime):
@@ -156,6 +157,7 @@ def start_month(input_datetime):
     start_update = start.strftime("%d.%m.%Y %H:%M:%S")
 
     return start_update
+
 
 #print(start_month(get_data("2018-02-16 12:01:58")))
 
@@ -168,17 +170,15 @@ def cards_info(input_xlsx_file: str) -> list[dict[str, Any]]:
     try:
         logger.info("Данные из файла xlsx импортированы")
 
-        cards = input_xlsx_file.groupby('Номер карты')
-        cards_prices = cards['Сумма операции с округлением'].sum()
+        cards = input_xlsx_file.groupby("Номер карты")
+        cards_prices = cards["Сумма операции с округлением"].sum()
         df_test = cards_prices.to_dict()
 
         for cards, sum in df_test.items():
             df_result = {}
-            #print(cards)
-            #print(f'{cards} = {sum}')
-            df_result['last_digits'] = cards
-            df_result['total_spent'] = sum
-            df_result['cashback'] = round(sum / 100, 2)
+            df_result["last_digits"] = cards
+            df_result["total_spent"] = sum
+            df_result["cashback"] = round(sum / 100, 2)
             df_output.append(df_result)
         return df_output
     except Exception:
@@ -187,4 +187,4 @@ def cards_info(input_xlsx_file: str) -> list[dict[str, Any]]:
 
 
 cards_info = cards_info(abs_xlsx_path)
-#print(cards_info)
+# print(cards_info)
