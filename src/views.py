@@ -96,8 +96,8 @@ def home_page(input_df: pd.DataFrame) -> Any:
     # Формируем список словарей с результатами
     result_list_dicts = {'greeting': greetings_output, 'cards': cards_description, 'top_transactions': top_five_transactions, 'currency_rates': currency_rates, 'stock_prices': stock_prices}
 
-    # Формируем json-файл
-    logger.info("json-файл создан успешно")
+    # Формируем json-ответ
+    logger.info("json-ответ создан успешно")
     json_output = json.dumps(result_list_dicts, ensure_ascii=False, indent=4)
     return json_output
 
