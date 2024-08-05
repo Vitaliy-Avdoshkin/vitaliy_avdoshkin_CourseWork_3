@@ -1,18 +1,13 @@
-import csv
 import json
 import logging
 import os
-import re
-from collections import Counter
-from datetime import datetime as dt
 from typing import Any
 
-import numpy as np
 import pandas as pd
-import requests
 from dotenv import load_dotenv
 
-from src.utils import start_month, greetings, cards_info, top_transactions, get_currency_rates, get_stock_prices
+from src.utils import (cards_info, get_currency_rates, get_stock_prices,
+                       greetings, start_month, top_transactions)
 
 load_dotenv(".env")
 
@@ -47,7 +42,7 @@ logger.addHandler(file_handler)
 # Импортируем DataFrame из xlsx-файла
 
 
-def input_from_excel(input_xlsx_file: str) -> list[Any]:
+def input_from_excel(input_xlsx_file: str) -> pd.DataFrame:
     """Функция принимает на вход путь до файла xlsx и возвращает список словарей"""
 
     dataframe = pd.read_excel(input_xlsx_file)
@@ -67,7 +62,7 @@ df = input_from_excel(abs_xlsx_path)
 input_datetime = "2018-02-16 12:01:58"
 
 
-def home_page(input_df: Any) -> Any:
+def home_page(input_df: pd.DataFrame) -> Any:
     """Функция принимает на вход DataFrame и возвращает json-файл"""
 
     # Формируем приветствие
@@ -79,8 +74,8 @@ def home_page(input_df: Any) -> Any:
 
     # Отфильтровываем DataFrame по лимиту дат
     logger.info("Входной DataFrame отфильтрован по лимиту дат")
-    df_date = pd.to_datetime(df["Дата операции"], format="%d.%m.%Y %H:%M:%S")
-    filtered_df_to_date = df[(begin_month <= df_date) & (df_date <= input_datetime)]
+    df_date = pd.to_datetime(input_df["Дата операции"], format="%d.%m.%Y %H:%M:%S")
+    filtered_df_to_date = input_df[(begin_month <= df_date) & (df_date <= input_datetime)]
 
     # Получаем требуемую информацию по картам (номер карты, общая сумма расходов, кэшбэк)
     logger.info("Информация по банковским картам получена: последние 4 цифры карты, общая сумма расходов, кэшбэк")
