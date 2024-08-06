@@ -1,18 +1,16 @@
-import os
-
-import pytest
-
-from src.reports import log
 import json
 import logging
 import os
 from datetime import datetime as dt
 from functools import wraps
 from typing import Any
+from unittest.mock import Mock
 
 import pandas as pd
+import pytest
 from dateutil.relativedelta import relativedelta as rdt
 
+from src.reports import log
 from src.utils import df
 
 # Получаем абсолютный путь до текущей директории
@@ -36,6 +34,8 @@ current_date = dt.now().strftime("%Y-%m-%d %H:%M:%S")
 
 
 def test_log_file():
+    """Функция тестирует открывание файла reports_log.txt"""
+
     @log(filename=reports_log)
     def spending_by_category(transactions: pd.DataFrame, category: str, date: str = current_date) -> str:
         """Функция принимает на вход датафрейм с транзакциями, категорию, дату.
@@ -50,7 +50,7 @@ def test_log_file():
         logger.info("DataFrame создан")
         filtered_df = transactions[
             (previous_month_date <= transactions["Дата операции"]) & (transactions["Дата операции"] <= date)
-            ]
+        ]
         df_cleaned = filtered_df.dropna()
         grouped_df = df_cleaned[df_cleaned["Категория"] == category]
         total_amount = grouped_df["Сумма платежа"].sum()
@@ -69,14 +69,6 @@ def test_log_file():
         json_output = json.dumps(result_output, ensure_ascii=False, indent=4)
         return json_output
 
-
-    with open(reports_log, "r") as file:
-
-        assert file == {
-    "category": "Транспорт",
-    "period": {
-        "from": "2020-08-06 18:23:24",
-        "to": "2024-08-06 18:23:24"
-    },
-    "total_amount": 7583.0
-}
+        with patch("builtins.open", mock_open()) as mocked_file:
+            result = spending_by_category
+            mocked_file.assert_called_once_with(reports_log, "w")

@@ -63,7 +63,7 @@ def log(filename: str) -> Any:
     return decorator
 
 
-@log(filename=reports_log)
+# @log(filename=reports_log)
 def spending_by_category(transactions: pd.DataFrame, category: str, date: str = current_date) -> str:
     """Функция принимает на вход датафрейм с транзакциями, категорию, дату.
     И возвращает суммарные траты по заданной категории за последние три месяца (от переданной даты)."""
@@ -80,13 +80,14 @@ def spending_by_category(transactions: pd.DataFrame, category: str, date: str = 
         (transactions["Дата операции"].between(previous_month_date, date)) & (transactions["Категория"] == category)
     ]
     df_cleaned = df_filter.dropna()
-    df_cleaned["Дата операции"] = df_cleaned["Дата операции"].astype(str)
+    df_cleaned["Дата операции"] = df_cleaned["Дата операции"].dt.strftime("%d-%m-%Y")
     output_list_dicts = df_cleaned.to_dict("records")
 
     # Формируем json-ответ
     logger.info("json-ответ с транзакциями по указанной категории и за указанный период времени успешно создан")
     json_output = json.dumps(output_list_dicts, ensure_ascii=False, indent=4)
     return json_output
+    print(output_list_dicts)
 
 
 if __name__ == "__main__":

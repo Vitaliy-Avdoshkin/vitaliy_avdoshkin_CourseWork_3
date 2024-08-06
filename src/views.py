@@ -100,11 +100,11 @@ def home_page(input_df: pd.DataFrame) -> Any:
         "currency_rates": currency_rates,
         "stock_prices": stock_prices,
     }
-
+    return result_list_dicts
     # Формируем json-ответ
-    logger.info("json-ответ создан успешно")
-    json_output = json.dumps(result_list_dicts, ensure_ascii=False, indent=4)
-    return json_output
+    # logger.info("json-ответ создан успешно")
+    # json_output = json.dumps(result_list_dicts, ensure_ascii=False, indent=4)
+    # return json_output
 
 
-print(home_page(df))
+#print(home_page(df))

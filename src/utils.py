@@ -78,9 +78,8 @@ def get_currency_rates(json_file: str) -> list[Any]:
             headers = {"apikey": API_KEY_RATES}
 
             response = requests.get(url, headers=headers)
-
             result = response.json()
-            # print(result)
+
             currency_rates_dict = {"currency": i, "rate": result["rates"].get("RUB")}
             currency_rates_list_dicts.append(currency_rates_dict)
 
@@ -95,7 +94,7 @@ def get_stock_prices(json_file: str) -> list[Any]:
 
         currencies_stocks_list = json.load(file)
         stock_prices_list_dicts = []
-        # print(transactions_info)
+
         for i in currencies_stocks_list["user_stocks"]:
 
             url = f"https://financialmodelingprep.com/api/v3/quote/{i}?apikey={API_KEY_STOCKS}"
@@ -103,6 +102,7 @@ def get_stock_prices(json_file: str) -> list[Any]:
             response = requests.get(url)
 
             result = response.json()
+
             stock_prices_dicts = {"stock": i, "price": result[0].get("priceAvg200")}
             stock_prices_list_dicts.append(stock_prices_dicts)
 
@@ -135,6 +135,7 @@ def start_month(input_datetime: str) -> dt:
 
 
 begin_month = start_month(input_datetime)
+
 
 
 def filter_date(df_test: str) -> pd.DataFrame:
