@@ -6,10 +6,7 @@ from typing import Any
 import pandas as pd
 from dotenv import load_dotenv
 
-from src.utils import (cards_info, get_currency_rates, get_stock_prices,
-                       greetings, start_month, top_transactions)
-
-
+from src.utils import format_date
 
 # Получаем абсолютный путь до текущей директории
 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -32,28 +29,34 @@ file_handler.setFormatter(file_formatter)
 logger.addHandler(file_handler)
 
 
-# Импортируем DataFrame из xlsx-файла
-def investment_bank(month: str, transactions: List[Dict[str, Any]], limit: int) -> float:
+# Формируем список словарей, содержащий информацию о транзакциях - transactions
+df = pd.read_excel(abs_xlsx_path)
+df_draft = df[["Дата платежа", 'Сумма платежа']].copy(deep=True)
+df_clean = df_draft.dropna()
+df_output = df_clean.to_dict("records")
+transactions = []
+for i in df_output:
+    output_dict = {}
+    output_dict['Дата платежа'] = format_date(i['Дата платежа'])
+    output_dict['Сумма платежа'] = abs(float(i['Сумма платежа']))
+    transactions.append(output_dict)
+
+#print(transactions)
+
+month = '2021-12'
+limit = 10
+for i in transactions:
+    if month in i['Дата платежа']:
+        print(i)
 
 
-def input_from_excel(input_xlsx_file: str) -> pd.DataFrame:
-    """Функция принимает на вход путь до файла xlsx и возвращает список словарей"""
-
-    dataframe = pd.read_excel(input_xlsx_file)
-
-    try:
-        logger.info("DataFrame создан")
-
-        return dataframe
-    except Exception:
-        logger.warning("Импортируемый список пуст или отсутствует.")
-        return []
+#def investment_bank(month: str, transactions: list[Dict[str, Any]], limit: int) -> float:
+    """Функция принимает на вход аналищируемый месяц, список словарей с транзакциями, предел оуркгления
+    и возвращает анализ инвестиционных накоплений в виде json-ответа"""
 
 
-df = input_from_excel(abs_xlsx_path)
 
-# Входящая дата
-input_datetime = "2018-02-16 12:01:58"
+
 
 
 def home_page(input_df: pd.DataFrame) -> Any:
@@ -88,7 +91,13 @@ def home_page(input_df: pd.DataFrame) -> Any:
     stock_prices = get_stock_prices(abs_json_path)
 
     # Формируем список словарей с результатами
-    result_list_dicts = {'greeting': greetings_output, 'cards': cards_description, 'top_transactions': top_five_transactions, 'currency_rates': currency_rates, 'stock_prices': stock_prices}
+    result_list_dicts = {
+        "greeting": greetings_output,
+        "cards": cards_description,
+        "top_transactions": top_five_transactions,
+        "currency_rates": currency_rates,
+        "stock_prices": stock_prices,
+    }
 
     # Формируем json-ответ
     logger.info("json-ответ создан успешно")
@@ -96,5 +105,4 @@ def home_page(input_df: pd.DataFrame) -> Any:
     return json_output
 
 
-
-print(home_page(df))
+#print(home_page(df))

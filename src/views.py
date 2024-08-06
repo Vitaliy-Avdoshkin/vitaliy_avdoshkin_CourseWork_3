@@ -6,8 +6,7 @@ from typing import Any
 import pandas as pd
 from dotenv import load_dotenv
 
-from src.utils import (cards_info, get_currency_rates, get_stock_prices,
-                       greetings, start_month, top_transactions)
+from src.utils import cards_info, get_currency_rates, get_stock_prices, greetings, start_month, top_transactions
 
 load_dotenv(".env")
 
@@ -94,13 +93,18 @@ def home_page(input_df: pd.DataFrame) -> Any:
     stock_prices = get_stock_prices(abs_json_path)
 
     # Формируем список словарей с результатами
-    result_list_dicts = {'greeting': greetings_output, 'cards': cards_description, 'top_transactions': top_five_transactions, 'currency_rates': currency_rates, 'stock_prices': stock_prices}
+    result_list_dicts = {
+        "greeting": greetings_output,
+        "cards": cards_description,
+        "top_transactions": top_five_transactions,
+        "currency_rates": currency_rates,
+        "stock_prices": stock_prices,
+    }
 
     # Формируем json-ответ
     logger.info("json-ответ создан успешно")
     json_output = json.dumps(result_list_dicts, ensure_ascii=False, indent=4)
     return json_output
-
 
 
 print(home_page(df))

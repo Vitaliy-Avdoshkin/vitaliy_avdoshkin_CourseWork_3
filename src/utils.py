@@ -60,14 +60,13 @@ def from_excel_to_list(input_xlsx_file: str) -> list[dict[str, Any]]:
         output_list_dicts = []
         for i in df_dict:
             output_list_dicts.append(i)
-        transactions =
         return output_list_dicts
     except Exception:
         logger.warning("Импортируемый список пуст или отсутствует.")
         return []
 
 
-print(from_excel_to_list(abs_xlsx_path))
+#print(from_excel_to_list(abs_xlsx_path))
 
 
 def get_currency_rates(json_file: str) -> list[Any]:
@@ -214,3 +213,8 @@ def top_transactions(input_df):
 
 
 # print(top_transactions(filtered_to_date))
+
+def format_date(input_datetime: str) -> str:
+    date_update = dt.strptime(input_datetime, "%d.%m.%Y")
+    return date_update.strftime("%Y-%m-%d")
+#print(format_date('12.01.2018'))
