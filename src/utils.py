@@ -113,6 +113,7 @@ input_datetime = "2018-02-16 12:01:58"
 
 
 def greetings(input_datetime: str) -> str:
+    """Функция принимает строку с датой и возвращает требуемое приветствие"""
     date_update = dt.strptime(input_datetime, "%Y-%m-%d %H:%M:%S")
     time = date_update.strftime("%H:%M:%S")
 
