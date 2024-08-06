@@ -75,18 +75,17 @@ def spending_by_category(transactions: pd.DataFrame, category: str, date: str = 
     transactions["Дата операции"] = pd.to_datetime(transactions["Дата операции"], format="%d.%m.%Y %H:%M:%S")
 
     # Создаем отфильтрованный по заданному периоду времени DataFrame
-    logger.info("DataFrame создан")
-    filtered_df = transactions[
-        (previous_month_date <= transactions["Дата операции"]) & (transactions["Дата операции"] <= date)
-    ]
-    df_cleaned = filtered_df.dropna()
-    grouped_df = df_cleaned[df_cleaned["Категория"] == category]
-    grouped_df['Дата операции'] = grouped_df['Дата операции'].astype(str)
-    output_list_dicts = grouped_df.to_dict('records')
+    logger.info("DataFrame отфильтрован по периоду дат")
+    df_filter = transactions.loc[(transactions["Дата операции"].between(previous_month_date, date)) & (transactions["Категория"] == category)]
+    df_cleaned = df_filter.dropna()
+    df_cleaned["Дата операции"] = df_cleaned["Дата операции"].astype(str)
+    output_list_dicts = df_cleaned.to_dict('records')
 
+    # Формируем json-ответ
+    logger.info('json-ответ с транзакциями по указанной категории и за указанный период времени успешно создан')
     json_output = json.dumps(output_list_dicts, ensure_ascii=False, indent=4)
     return json_output
-    #print(output_list_dicts)
+
 
 if __name__ == "__main__":
     print(spending_by_category(df, "Транспорт"))
