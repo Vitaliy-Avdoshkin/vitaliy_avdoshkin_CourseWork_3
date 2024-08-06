@@ -201,32 +201,28 @@ def top_transactions(input_df):
 #
 # print(get_transactions_info(abs_xlsx_path))
 
+
 def format_date(input_datetime: str) -> str:
     date_update = dt.strptime(input_datetime, "%d.%m.%Y")
     return date_update.strftime("%Y-%m-%d")
-#print(format_date('12.01.2018'))
 
 
-
+# print(format_date('12.01.2018'))
 
 
 df = pd.read_excel(abs_xlsx_path)
-df_draft = df[["Дата платежа", 'Сумма платежа']].copy(deep=True)
+df_draft = df[["Дата платежа", "Сумма платежа"]].copy(deep=True)
 df_clean = df_draft.dropna()
 df_output = df_clean.to_dict("records")
 transactions = []
 for i in df_output:
     output_dict = {}
-    output_dict['Дата платежа'] = format_date(i['Дата платежа'])
-    output_dict['Сумма платежа'] = i['Сумма платежа']
+    output_dict["Дата платежа"] = format_date(i["Дата платежа"])
+    output_dict["Сумма платежа"] = i["Сумма платежа"]
     transactions.append(output_dict)
 
 
-#print(transactions)
-
-
-
-
+# print(transactions)
 
 
 # def from_excel_to_list(input_xlsx_file: str) -> list[dict[str, Any]]:

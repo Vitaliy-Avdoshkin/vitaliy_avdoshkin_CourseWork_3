@@ -31,32 +31,32 @@ logger.addHandler(file_handler)
 
 # Формируем список словарей, содержащий информацию о транзакциях - transactions
 df = pd.read_excel(abs_xlsx_path)
-df_draft = df[["Дата платежа", 'Сумма платежа']].copy(deep=True)
+df_draft = df[["Дата платежа", "Сумма платежа"]].copy(deep=True)
 df_clean = df_draft.dropna()
 df_output = df_clean.to_dict("records")
 transactions = []
 for i in df_output:
     output_dict = {}
-    output_dict['Дата платежа'] = format_date(i['Дата платежа'])
-    output_dict['Сумма платежа'] = abs(float(i['Сумма платежа']))
+    output_dict["Дата платежа"] = format_date(i["Дата платежа"])
+    output_dict["Сумма платежа"] = abs(float(i["Сумма платежа"]))
     transactions.append(output_dict)
 
-#print(transactions)
-
-month = '2021-12'
-limit = 10
-for i in transactions:
-    if month in i['Дата платежа']:
-        print(i)
+# print(transactions)
 
 
-#def investment_bank(month: str, transactions: list[Dict[str, Any]], limit: int) -> float:
+def investment_bank(month: str, transactions: list[dict[str, Any]], limit: int) -> float:
     """Функция принимает на вход аналищируемый месяц, список словарей с транзакциями, предел оуркгления
     и возвращает анализ инвестиционных накоплений в виде json-ответа"""
 
+    result = 0
+    for i in transactions:
+        if month in i["Дата платежа"]:
+            result += limit - (i["Сумма платежа"] % limit)
+
+    return round(result, 2)
 
 
-
+print(investment_bank("2021-12", transactions, 10))
 
 
 def home_page(input_df: pd.DataFrame) -> Any:
@@ -105,4 +105,4 @@ def home_page(input_df: pd.DataFrame) -> Any:
     return json_output
 
 
-#print(home_page(df))
+# print(home_page(df))
