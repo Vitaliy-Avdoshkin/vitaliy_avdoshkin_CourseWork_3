@@ -41,7 +41,7 @@ logger.addHandler(file_handler)
 # Импортируем DataFrame из xlsx-файла
 
 
-def input_from_excel(input_xlsx_file: str) -> pd.DataFrame:
+def input_from_excel(input_xlsx_file: str) -> pd.DataFrame | list[Any]:
     """Функция принимает на вход путь до файла xlsx и возвращает список словарей"""
 
     dataframe = pd.read_excel(input_xlsx_file)
@@ -107,4 +107,4 @@ def home_page(input_df: pd.DataFrame) -> Any:
     return json_output
 
 
-print(home_page(df))
+# print(home_page(df))

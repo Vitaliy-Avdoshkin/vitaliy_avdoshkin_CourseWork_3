@@ -1,8 +1,6 @@
 import json
 import logging
 import os
-import re
-from collections import Counter
 from datetime import datetime as dt
 from typing import Any
 
@@ -47,7 +45,7 @@ with open(abs_json_path, "w") as file:
     json.dump(currencies_stocks_dict, file)
 
 
-def import_from_excel(input_xlsx_file: str) -> list[dict[str, Any]]:
+def import_from_excel(input_xlsx_file: str) -> pd.DataFrame:
     """Функция принимает на вход путь до файла xlsx и возвращает список словарей"""
 
     input_df = pd.read_excel(input_xlsx_file)
@@ -58,11 +56,10 @@ def import_from_excel(input_xlsx_file: str) -> list[dict[str, Any]]:
         return input_df
     except Exception:
         logger.warning("Импортируемый список пуст или отсутствует.")
-        return []
+        return input_df
 
 
 df = import_from_excel(abs_xlsx_path)
-# print(df)
 
 
 def get_currency_rates(json_file: str) -> list[Any]:
@@ -90,9 +87,6 @@ def get_currency_rates(json_file: str) -> list[Any]:
         return currency_rates_list_dicts
 
 
-# print(get_currency_rates(abs_json_path))
-
-
 def get_stock_prices(json_file: str) -> list[Any]:
     """Функция принимает на вход json-файл и возвращает список словарей с курсами требуемых акций.
     Стоимости акций функция импортирует через API"""
@@ -115,8 +109,6 @@ def get_stock_prices(json_file: str) -> list[Any]:
         return stock_prices_list_dicts
 
 
-# print(get_stock_prices(abs_json_path))
-
 input_datetime = "2018-02-16 12:01:58"
 
 
@@ -134,20 +126,18 @@ def greetings(input_datetime: str) -> str:
         return "Доброй ночи"
 
 
-# print(greetings(input_time))
-
-
-def start_month(input_datetime):
+def start_month(input_datetime: str) -> dt:
+    """Функция принимает на вход строку с датой и возвращает начало месяца"""
     date_update = dt.strptime(input_datetime, "%Y-%m-%d %H:%M:%S")
     start = date_update.replace(day=1, hour=0, minute=0, second=0)
     return start
 
 
 begin_month = start_month(input_datetime)
-# print(begin_month)
 
 
-def filter_date(df_test):
+def filter_date(df_test: str) -> pd.DataFrame:
+    """Функция создает DataFrame по заданному периоду времени"""
     df = pd.read_excel(df_test)
     df_date = pd.to_datetime(df["Дата операции"], format="%d.%m.%Y %H:%M:%S")
     filtered_df_to_date = df[(begin_month <= df_date) & (df_date <= input_datetime)]
@@ -155,10 +145,9 @@ def filter_date(df_test):
 
 
 filtered_to_date = filter_date(abs_xlsx_path)
-# print(filter_date(abs_xlsx_path))
 
 
-def cards_info(input_df: str) -> list[dict[str, Any]]:
+def cards_info(input_df: pd.DataFrame) -> list[dict[str, Any]]:
     """Функция принимает на вход путь до файла xlsx и возвращает DataFrame"""
 
     df_input = input_df
@@ -179,13 +168,11 @@ def cards_info(input_df: str) -> list[dict[str, Any]]:
         return df_output
     except Exception:
         logger.warning("Импортируемый список пуст или отсутствует.")
-        return "Импортируемый список пуст или отсутствует."
+        return [{}]
 
 
-# print(cards_info(filtered_to_date))
-
-
-def top_transactions(input_df):
+def top_transactions(input_df: pd.DataFrame) -> list[dict[str, Any]] | None:
+    """Функция принимает на вход DataFrame и возвращает ТОП-5 транзакций по сумме платежа"""
     df_input_sort = input_df
     df_output_sort = []
     try:
@@ -205,15 +192,10 @@ def top_transactions(input_df):
         return df_output_sort
     except Exception:
         logger.warning("Импортируемый список пуст или отсутствует.")
-        return "Импортируемый список пуст или отсутствует."
-
-
-# print(top_transactions(filtered_to_date))
+        return None
 
 
 def format_date(input_datetime: str) -> str:
+    """Функция форматирует дату"""
     date_update = dt.strptime(input_datetime, "%d.%m.%Y")
     return date_update.strftime("%Y-%m-%d")
-
-
-# print(format_date('12.01.2018'))

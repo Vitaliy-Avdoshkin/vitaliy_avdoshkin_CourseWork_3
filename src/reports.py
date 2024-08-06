@@ -1,12 +1,14 @@
 import json
 import logging
 import os
-from typing import Optional, Any
 from datetime import datetime as dt
+from functools import wraps
+from typing import Any
+
 import pandas as pd
 from dateutil.relativedelta import relativedelta as rdt
+
 from src.utils import df
-from functools import wraps
 
 # Получаем абсолютный путь до текущей директории
 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -62,15 +64,13 @@ def log(filename: str) -> Any:
 
 
 @log(filename=reports_log)
-def spending_by_category(
-    transactions: pd.DataFrame, category: str, date: Optional[str] = current_date
-) -> pd.DataFrame:
+def spending_by_category(transactions: pd.DataFrame, category: str, date: str = current_date) -> str:
     """Функция принимает на вход датафрейм с транзакциями, категори, дату.
     B возвращает траты по заданной категории за последние три месяца (от переданной даты)."""
     # Форматируем дату
     logger.info("Дата отформатирована")
-    date_update = dt.strptime(date, "%Y-%m-%d %H:%M:%S")
-    previous_month_date = date_update + rdt(months=-48)
+    date_updated = dt.strptime(date, "%Y-%m-%d %H:%M:%S")
+    previous_month_date = date_updated + rdt(months=-48)
     transactions["Дата операции"] = pd.to_datetime(transactions["Дата операции"], format="%d.%m.%Y %H:%M:%S")
 
     # Создаем отфильтрованный по заданному периоду времени DataFrame

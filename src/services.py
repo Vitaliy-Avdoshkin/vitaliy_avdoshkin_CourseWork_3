@@ -3,9 +3,7 @@ import logging
 import os
 from typing import Any
 
-import pandas as pd
-
-from src.utils import format_date, df
+from src.utils import df, format_date
 
 # Получаем абсолютный путь до текущей директории
 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -36,13 +34,13 @@ transactions = []
 for i in df_output:
     output_dict = {}
     output_dict["Дата платежа"] = format_date(i["Дата платежа"])
-    output_dict["Сумма платежа"] = abs(float(i["Сумма платежа"]))
+    output_dict["Сумма платежа"] = abs((i["Сумма платежа"]))
     transactions.append(output_dict)
 
 # print(transactions)
 
 
-def investment_bank(month: str, transactions: list[dict[str, Any]], limit: int) -> float:
+def investment_bank(month: str, transactions: list[dict[str, Any]], limit: int) -> float | str:
     """Функция принимает на вход анализируемый месяц, список словарей с транзакциями, шаг округления
     и возвращает анализ инвестиционных накоплений в виде json-ответа"""
 
@@ -64,4 +62,4 @@ def investment_bank(month: str, transactions: list[dict[str, Any]], limit: int) 
     return json_output
 
 
-print(investment_bank("2021-12", transactions, 10))
+# rint(investment_bank("2021-12", transactions, 10))
