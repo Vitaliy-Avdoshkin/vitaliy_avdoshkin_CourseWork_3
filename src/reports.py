@@ -63,10 +63,11 @@ def log(filename: str) -> Any:
     return decorator
 
 
-@log(filename=reports_log)
+#@log(filename=reports_log)
 def spending_by_category(transactions: pd.DataFrame, category: str, date: str = current_date) -> str:
     """Функция принимает на вход датафрейм с транзакциями, категорию, дату.
     И возвращает суммарные траты по заданной категории за последние три месяца (от переданной даты)."""
+
     # Форматируем дату
     logger.info("Дата отформатирована")
     date_updated = dt.strptime(date, "%Y-%m-%d %H:%M:%S")
@@ -80,22 +81,12 @@ def spending_by_category(transactions: pd.DataFrame, category: str, date: str = 
     ]
     df_cleaned = filtered_df.dropna()
     grouped_df = df_cleaned[df_cleaned["Категория"] == category]
-    total_amount = grouped_df["Сумма платежа"].sum()
+    grouped_df['Дата операции'] = grouped_df['Дата операции'].astype(str)
+    output_list_dicts = grouped_df.to_dict('records')
 
-    # Формируем список словарей с результатами
-    result_output = {
-        "category": category,
-        "period": {"from": str(previous_month_date), "to": str(date)},
-        "total_amount": abs(total_amount),
-    }
-
-    # Формируем json-ответ
-    logger.info(
-        f"json-ответ с тратами по категории - {category}, в период с {previous_month_date} по {date} создан успешно"
-    )
-    json_output = json.dumps(result_output, ensure_ascii=False, indent=4)
+    json_output = json.dumps(output_list_dicts, ensure_ascii=False, indent=4)
     return json_output
-
+    #print(output_list_dicts)
 
 if __name__ == "__main__":
     print(spending_by_category(df, "Транспорт"))

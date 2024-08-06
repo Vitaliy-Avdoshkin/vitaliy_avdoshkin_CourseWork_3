@@ -107,4 +107,4 @@ def home_page(input_df: pd.DataFrame) -> Any:
     return json_output
 
 
-# print(home_page(df))
+print(home_page(df))
