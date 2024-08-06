@@ -4,9 +4,8 @@ import os
 from typing import Any
 
 import pandas as pd
-from dotenv import load_dotenv
 
-from src.utils import format_date
+from src.utils import format_date, df
 
 # Получаем абсолютный путь до текущей директории
 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -14,7 +13,6 @@ current_dir = os.path.dirname(os.path.abspath(__file__))
 # Создаем путь до файла логов относительно текущей директории
 rel_log_file_path = os.path.join(current_dir, "../logs/services.log")
 abs_log_file_path = os.path.abspath(rel_log_file_path)
-
 
 # Создаем путь до файла operations.xlsx относительно текущей директории
 rel_xlsx_path = os.path.join(current_dir, "../data/operations.xlsx")
@@ -31,7 +29,6 @@ logger.addHandler(file_handler)
 
 # Формируем список словарей, содержащий информацию о транзакциях - transactions
 logger.info("Cписок словарей, содержащий информацию о транзакциях (transactions) сформирован")
-df = pd.read_excel(abs_xlsx_path)
 df_draft = df[["Дата платежа", "Сумма платежа"]].copy(deep=True)
 df_clean = df_draft.dropna()
 df_output = df_clean.to_dict("records")
@@ -54,28 +51,17 @@ def investment_bank(month: str, transactions: list[dict[str, Any]], limit: int) 
         if month in i["Дата платежа"]:
             result += limit - (i["Сумма платежа"] % limit)
             result = round(result, 2)
-    logger.info(f"Сумма, которую удалось бы отложить в «Инвесткопилку» за {month} с шагом округления {limit} составляет {result}")
-    return result
+    logger.info(
+        f"Потенциальная сумма , отложенная в «Инвесткопилку» за {month} с шагом округления {limit} составляет {result}"
+    )
+
+    # Формируем список словарей с результатами
+    result_list_dicts = {"month": month, "rounding_step": limit, "total_amount": result}
+
+    # Формируем json-ответ
+    logger.info('json-ответ с общей суумой, которую удалось отложить в "Инвесткопилку" создан успешно')
+    json_output = json.dumps(result_list_dicts, ensure_ascii=False, indent=4)
+    return json_output
 
 
 print(investment_bank("2021-12", transactions, 10))
-
-
-
-
-    # # Формируем список словарей с результатами
-    # result_list_dicts = {
-    #     "greeting": greetings_output,
-    #     "cards": cards_description,
-    #     "top_transactions": top_five_transactions,
-    #     "currency_rates": currency_rates,
-    #     "stock_prices": stock_prices,
-    # }
-    #
-    # # Формируем json-ответ
-    # logger.info("json-ответ создан успешно")
-    # json_output = json.dumps(result_list_dicts, ensure_ascii=False, indent=4)
-    # return json_output
-
-
-# print(home_page(df))
