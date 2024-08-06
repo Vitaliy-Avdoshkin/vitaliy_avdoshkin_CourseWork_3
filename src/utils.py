@@ -62,7 +62,7 @@ def import_from_excel(input_xlsx_file: str) -> list[dict[str, Any]]:
 
 
 df = import_from_excel(abs_xlsx_path)
-#print(df)
+# print(df)
 
 
 def get_currency_rates(json_file: str) -> list[Any]:
@@ -144,7 +144,7 @@ def start_month(input_datetime):
 
 
 begin_month = start_month(input_datetime)
-# print(start_month(input_time))
+# print(begin_month)
 
 
 def filter_date(df_test):
