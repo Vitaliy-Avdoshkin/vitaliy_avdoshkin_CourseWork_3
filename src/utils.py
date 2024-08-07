@@ -46,7 +46,7 @@ with open(abs_json_path, "w") as file:
 
 
 def import_from_excel(input_xlsx_file: str) -> pd.DataFrame:
-    """Функция принимает на вход путь до файла xlsx и возвращает список словарей"""
+    """Функция принимает на вход путь до файла xlsx и возвращает DataFrame"""
 
     input_df = pd.read_excel(input_xlsx_file)
 
