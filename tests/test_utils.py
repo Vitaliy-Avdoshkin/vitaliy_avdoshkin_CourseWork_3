@@ -3,7 +3,7 @@ import pytest
 from unittest.mock import patch
 from datetime import datetime
 
-from src.utils import get_currency_rates, get_stock_prices, greetings, start_month
+from src.utils import get_currency_rates, get_stock_prices, greetings, start_month, format_date
 
 # Получаем абсолютный путь до текущей директории
 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -54,6 +54,20 @@ def test_greetings(date, greetings_output):
     """Функция тестирует вывод приветствия в зависимрсти от времени суток"""
     assert greetings(date) == greetings_output
 
+
 def test_start_month(month):
     """Функция тестирует вывод начала месяца от предоставленной даты"""
     assert start_month("2018-02-16 12:01:58") == month
+
+
+@pytest.mark.parametrize(
+    "date, formatted_date",
+    [
+        ("16.02.2018", "2018-02-16"),
+        ("01.01.2001", "2001-01-01"),
+        ("1.02.2018", "2018-02-01"),
+    ],
+)
+def test_format_date(date, formatted_date):
+    """Функция тестирует вывод приветствия в зависимрсти от времени суток"""
+    assert format_date(date) == formatted_date

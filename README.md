@@ -50,7 +50,7 @@ exclude = .git, __pycache__
 black, isort, mypy
 ```
 [tool.black]
-line-length = 119
+line_length = 119
 exclude = '''
 /(
   | \.git
@@ -58,7 +58,7 @@ exclude = '''
 '''
 
 [tool.isort]
-line-length = 119
+line_length = 119
 
 [tool.mypy]
 disallow_untyped_defs = true

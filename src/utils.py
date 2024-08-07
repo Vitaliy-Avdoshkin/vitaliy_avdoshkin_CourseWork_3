@@ -137,7 +137,6 @@ def start_month(input_datetime: str) -> dt:
 begin_month = start_month(input_datetime)
 
 
-
 def filter_date(df_test: str) -> pd.DataFrame:
     """Функция создает DataFrame по заданному периоду времени"""
     df = pd.read_excel(df_test)
