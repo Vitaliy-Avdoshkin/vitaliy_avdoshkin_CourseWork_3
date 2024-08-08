@@ -51,12 +51,12 @@ def test_get_stock_prices(mock_get: Any) -> Any:
         ("2018-02-16 03:01:58", "Доброй ночи"),
     ],
 )
-def test_greetings(date: str, greetings_output: str) -> str:
+def test_greetings(date: str, greetings_output: str) -> Any:
     """Функция тестирует вывод приветствия в зависимрсти от времени суток"""
     assert greetings(date) == greetings_output
 
 
-def test_start_month(month: str) -> str:
+def test_start_month(month: str) -> Any:
     """Функция тестирует вывод начала месяца от предоставленной даты"""
     assert start_month("2018-02-16 12:01:58") == month
 
@@ -69,6 +69,6 @@ def test_start_month(month: str) -> str:
         ("1.02.2018", "2018-02-01"),
     ],
 )
-def test_format_date(date: str, formatted_date: str) -> str:
+def test_format_date(date: str, formatted_date: str) -> Any:
     """Функция тестирует вывод приветствия в зависимрсти от времени суток"""
     assert format_date(date) == formatted_date

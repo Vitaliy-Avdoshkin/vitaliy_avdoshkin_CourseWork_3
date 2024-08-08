@@ -1,4 +1,5 @@
 import os
+from typing import Any
 from unittest.mock import patch
 
 from dotenv import load_dotenv
@@ -27,7 +28,7 @@ rel_xlsx_path = os.path.join(current_dir, "../data/operations.xlsx")
 abs_xlsx_path = os.path.abspath(rel_xlsx_path)
 
 
-def test_home_page(page: str) -> str:
+def test_home_page(page: str) -> Any:
     """Функция тестирует работу главной функции home_page"""
     with (
         patch("src.views.get_currency_rates") as mock_get_currency_rates,
